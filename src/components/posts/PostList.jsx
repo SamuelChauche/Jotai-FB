@@ -1,17 +1,32 @@
-import PostCard from './PostCard'
+import { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { postsAtom } from '../../atoms/postsAtom';
+import PostItem from './PostItem';
+import { fetchPosts } from '../../services/postsAPI';
 
-const PostsList = ({ posts }) => {
+const PostList = () => {
+    const [posts, setPosts] = useAtom(postsAtom);
+
+    useEffect(() => {
+        const loadPosts = async () => {
+            try {
+                const postsData = await fetchPosts();
+                setPosts(postsData);
+            } catch (error) {
+                console.error('Failed to load posts:', error);
+            }
+        };
+
+        loadPosts();
+    }, [setPosts]);
+
     return (
-        <div className="space-y-4">
-            {posts.length === 0 ? (
-                <div className="text-center py-4">No posts found</div>
-            ) : (
-                posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                ))
-            )}
+        <div className="post-list">
+            {posts.map((post) => (
+                <PostItem key={post.created_at} post={post} />
+            ))}
         </div>
-    )
-}
+    );
+};
 
-export default PostsList
+export default PostList;

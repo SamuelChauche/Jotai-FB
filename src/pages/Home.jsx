@@ -1,29 +1,20 @@
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useAtom } from 'jotai';
+import { isAuthenticatedAtom } from '../atoms/authAtom';
+import CreatePost from '../components/posts/CreatePost';
+import PostList from '../components/posts/PostList';
 
 const Home = () => {
-    const { isAuthenticated } = useSelector((state) => state.auth)
+    const [isAuthenticated] = useAtom(isAuthenticatedAtom);
 
     return (
-        <div className="hero-section">
-            <h1 className="hero-title">Welcome to SocialApp</h1>
-            {isAuthenticated ? (
-                <Link to="/posts" className="hero-button">
-                    View Posts
-                </Link>
-            ) : (
-                <div className="hero-actions">
-                    <Link to="/login" className="login-button">
-                        Login
-                    </Link>
-                    <Link to="/register" className="register-button">
-                        Register
-                    </Link>
-                </div>
-            )}
+        <div className="home-page">
+            <h1 className="page-title">Fil d'actualité</h1>
+
+            {isAuthenticated && <CreatePost />}
+
+            <PostList />
         </div>
+    );
+};
 
-    )
-}
-
-export default Home
+export default Home;

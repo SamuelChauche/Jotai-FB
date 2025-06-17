@@ -1,30 +1,32 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Layout from './components/Common/Layout'
-import Home from './pages/Home'
-import Login from './pages/Auth/Login'
-import Register from './pages/Auth/Register'
-import Posts from './pages/Posts/Posts'
-import ProtectedRoute from './components/Common/ProtectedRoute'
-import CreatePost from './pages/Posts/CreatePost'
-import Profile from './pages/Profile'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Provider } from 'jotai';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/ProfilePage'
+import RegisterPage from './pages/RegisterPage';
+import { DevTools } from 'jotai-devtools'
+import 'jotai-devtools/styles.css'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="posts" element={<Posts />} />
-            <Route path="posts/create" element={<CreatePost />} />
-            <Route path="profile" element={<Profile />} />
-          </Route>
-        </Route>
-      </Routes>
-    </Router>
-  )
+    <Provider>
+      <Router>
+        <div className="app">
+          <Navbar />
+            <DevTools />
+          <div className="content-container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile/:userId" element={<ProfilePage />} />
+            </Routes>
+          </div>
+        </div>
+      </Router>
+    </Provider>
+  );
 }
 
-export default App
+export default App;
